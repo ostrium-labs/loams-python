@@ -1,6 +1,9 @@
 # Loams Python examples
 
-[Loams](https://loams.dev) is an open-source data engine that keeps your data in your own bucket and serves hybrid search (vector, BM25 and filters) and SQL over it. This repo holds example apps for the [Python SDK](https://github.com/ostrium-labs/loams/tree/main/sdks/python) (`loams` 0.1.0).
+These examples target **Loams SDK 0.1.2**. Installation and CI require the matching
+0.1.2 packages and release tags to be published.
+
+[Loams](https://loams.dev) is an open-source data engine that keeps your data in your own bucket and serves hybrid search (vector, BM25 and filters) and SQL over it. This repo holds example apps for the [Python SDK](https://github.com/ostrium-labs/loams/tree/main/sdks/python) (`loams` 0.1.2).
 
 | Example | What it shows |
 |---|---|
@@ -12,13 +15,14 @@
 
 ```sh
 python -m venv .venv && . .venv/bin/activate
-pip install loams==0.1.0 fastapi uvicorn
+pip install -r requirements.txt
 ```
 
-If `loams` is not on PyPI yet, install the SDK from the monorepo instead:
+For local SDK development, explicitly install a checkout of the matching release:
 
 ```sh
-git clone https://github.com/ostrium-labs/loams && pip install ./loams/sdks/python
+git clone --branch v0.1.2 --depth 1 https://github.com/ostrium-labs/loams
+pip install ./loams/sdks/python
 ```
 
 ## Run against a local engine
@@ -26,7 +30,7 @@ git clone https://github.com/ostrium-labs/loams && pip install ./loams/sdks/pyth
 Start an engine (`cargo run -p loams -- dev` from the [monorepo](https://github.com/ostrium-labs/loams), or the compose stack from [docs/release/preview.md](https://github.com/ostrium-labs/loams/blob/main/docs/release/preview.md)), then:
 
 ```sh
-export LOAMS_ENDPOINT=http://127.0.0.1:8080   # default in these examples: http://127.0.0.1:18080
+export LOAMS_ENDPOINT=http://127.0.0.1:8080   # default
 export LOAMS_API_KEY=...                       # only if auth is on
 python quickstart/quickstart.py
 python sql/sql.py
@@ -36,6 +40,6 @@ Examples read and write only the namespace `examples-python` (override with `LOA
 
 ## A note on the SDK surface
 
-SDK 0.1.0 generates the `instance`, `live` and `system` modules; collections, search and SQL are not in it yet. The examples use the SDK for connecting and instance/feature discovery and call the engine's native HTTP JSON API ([`quickstart/native.py`](quickstart/native.py), about 20 lines) for the rest. When the SDK grows those modules the helper goes away.
+The SDK provides namespaces, collections, documents, search, vector, graph, SQL and streams on both sync and async clients. These examples retain the native HTTP JSON helper ([`quickstart/native.py`](quickstart/native.py)) for their HTTP route examples. The [SDK notes example](https://github.com/ostrium-labs/loams/blob/v0.1.2/sdks/python/examples/notes/main.py) demonstrates builders, collection handles and SDK SQL.
 
 Docs: <https://loams.dev/docs>. License: Apache-2.0.

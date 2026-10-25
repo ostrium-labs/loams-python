@@ -1,15 +1,14 @@
 """A thin helper over the Loams native HTTP API (JSON).
 
-The Python SDK 0.1.0 covers the instance, live and system modules; collections,
-search and SQL are not in its generated surface yet, so the examples call the
-native API directly for those. Everything is plain JSON over HTTP.
+These examples demonstrate the native HTTP JSON API alongside the SDK. The SDK
+also provides app modules, builders, collection handles, SQL and streams.
 """
 import json
 import os
 import urllib.error
 import urllib.request
 
-ENDPOINT = os.environ.get("LOAMS_ENDPOINT", "http://127.0.0.1:18080").rstrip("/")
+ENDPOINT = os.environ.get("LOAMS_ENDPOINT", "http://127.0.0.1:8080").rstrip("/")
 API_KEY = os.environ.get("LOAMS_API_KEY", "")
 
 
