@@ -1,7 +1,7 @@
 # sql
 
-Runs SQL over the `kb` collection: a plain `SELECT` and a hybrid `rrf(vector_search(...), text_search(...))`. Run `../quickstart` first.
+Runs parameterized, read-only statements through `loams.sql.records` over the `kb` collection created by the quickstart, including hybrid retrieval in SQL.
 
 ```sh
-cd sql && python sql.py
+python sql/sql.py
 ```

@@ -1,24 +1,28 @@
 # Loams Python examples
 
-[Loams](https://loams.dev) is an open-source data engine that keeps your data in your own bucket and serves hybrid search (vector, BM25 and filters) and SQL over it. This repo holds example apps for the [Python SDK](https://github.com/ostrium-labs/loams/tree/main/sdks/python) (`loams` 0.1.0).
+These examples target the released **Loams SDK 0.1.2**.
+
+[Loams](https://loams.dev) is an open-source data engine that keeps your data in your own bucket and serves hybrid search (vector, BM25 and filters) and SQL over it. This repo holds example apps for the [Python SDK](https://github.com/ostrium-labs/loams/tree/main/sdks/python) (`loams` 0.1.2).
 
 | Example | What it shows |
 |---|---|
 | [quickstart](quickstart) | connect, create a collection, upsert documents, hybrid search |
 | [sql](sql) | SQL over the collection, including `rrf(vector_search(...), text_search(...))` |
-| [fastapi-search](fastapi-search) | a FastAPI `/search` endpoint |
+| [fastapi-search](fastapi-search) | a FastAPI `/search` endpoint using the collection handle |
+| [platform](platform) | opt-in, read-only auth/admin/Live admin module calls |
 
 ## Install
 
 ```sh
 python -m venv .venv && . .venv/bin/activate
-pip install loams==0.1.0 fastapi uvicorn
+pip install -r requirements.txt
 ```
 
-If `loams` is not on PyPI yet, install the SDK from the monorepo instead:
+For local SDK development, explicitly install a checkout of the matching release:
 
 ```sh
-git clone https://github.com/ostrium-labs/loams && pip install ./loams/sdks/python
+git clone --branch v0.1.2 --depth 1 https://github.com/ostrium-labs/loams
+pip install ./loams/sdks/python
 ```
 
 ## Run against a local engine
@@ -26,16 +30,17 @@ git clone https://github.com/ostrium-labs/loams && pip install ./loams/sdks/pyth
 Start an engine (`cargo run -p loams -- dev` from the [monorepo](https://github.com/ostrium-labs/loams), or the compose stack from [docs/release/preview.md](https://github.com/ostrium-labs/loams/blob/main/docs/release/preview.md)), then:
 
 ```sh
-export LOAMS_ENDPOINT=http://127.0.0.1:8080   # default in these examples: http://127.0.0.1:18080
+export LOAMS_ENDPOINT=http://127.0.0.1:8080   # default
 export LOAMS_API_KEY=...                       # only if auth is on
 python quickstart/quickstart.py
 python sql/sql.py
+LOAMS_PLATFORM_EXAMPLE=1 python platform/platform.py   # authorized credential required
 ```
 
 Examples read and write only the namespace `examples-python` (override with `LOAMS_NAMESPACE`).
 
-## A note on the SDK surface
+## SDK module coverage
 
-SDK 0.1.0 generates the `instance`, `live` and `system` modules; collections, search and SQL are not in it yet. The examples use the SDK for connecting and instance/feature discovery and call the engine's native HTTP JSON API ([`quickstart/native.py`](quickstart/native.py), about 20 lines) for the rest. When the SDK grows those modules the helper goes away.
+The quickstart and app examples use the published 0.1.2 SDK for namespace and collection setup, documents, hybrid/vector search, SQL records, streams, instance discovery, system feature detection and optional Graph. The generated `auth`, `admin.*` and `live.admin` modules are available through `loams.modules[...]` in Python 0.1.2; the opt-in platform example uses read-only calls and needs an authorized credential. House has no Python SDK module in 0.1.2. The existing TypeScript Live-tail example illustrates the `live` session and `tables` modules.
 
 Docs: <https://loams.dev/docs>. License: Apache-2.0.
