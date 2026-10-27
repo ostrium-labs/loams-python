@@ -1,7 +1,6 @@
 # Loams Python examples
 
-These examples target **Loams SDK 0.1.2**. Installation and CI require the matching
-0.1.2 packages and release tags to be published.
+These examples target the released **Loams SDK 0.1.2**.
 
 [Loams](https://loams.dev) is an open-source data engine that keeps your data in your own bucket and serves hybrid search (vector, BM25 and filters) and SQL over it. This repo holds example apps for the [Python SDK](https://github.com/ostrium-labs/loams/tree/main/sdks/python) (`loams` 0.1.2).
 
@@ -9,7 +8,8 @@ These examples target **Loams SDK 0.1.2**. Installation and CI require the match
 |---|---|
 | [quickstart](quickstart) | connect, create a collection, upsert documents, hybrid search |
 | [sql](sql) | SQL over the collection, including `rrf(vector_search(...), text_search(...))` |
-| [fastapi-search](fastapi-search) | a FastAPI `/search` endpoint |
+| [fastapi-search](fastapi-search) | a FastAPI `/search` endpoint using the collection handle |
+| [platform](platform) | opt-in, read-only auth/admin/Live admin module calls |
 
 ## Install
 
@@ -34,12 +34,13 @@ export LOAMS_ENDPOINT=http://127.0.0.1:8080   # default
 export LOAMS_API_KEY=...                       # only if auth is on
 python quickstart/quickstart.py
 python sql/sql.py
+LOAMS_PLATFORM_EXAMPLE=1 python platform/platform.py   # authorized credential required
 ```
 
 Examples read and write only the namespace `examples-python` (override with `LOAMS_NAMESPACE`).
 
-## A note on the SDK surface
+## SDK module coverage
 
-The SDK provides namespaces, collections, documents, search, vector, graph, SQL and streams on both sync and async clients. These examples retain the native HTTP JSON helper ([`quickstart/native.py`](quickstart/native.py)) for their HTTP route examples. The [SDK notes example](https://github.com/ostrium-labs/loams/blob/v0.1.2/sdks/python/examples/notes/main.py) demonstrates builders, collection handles and SDK SQL.
+The quickstart and app examples use the published 0.1.2 SDK for namespace and collection setup, documents, hybrid/vector search, SQL records, streams, instance discovery, system feature detection and optional Graph. The generated `auth`, `admin.*` and `live.admin` modules are available through `loams.modules[...]` in Python 0.1.2; the opt-in platform example uses read-only calls and needs an authorized credential. House has no Python SDK module in 0.1.2. The existing TypeScript Live-tail example illustrates the `live` session and `tables` modules.
 
 Docs: <https://loams.dev/docs>. License: Apache-2.0.

@@ -10,6 +10,8 @@ jobs:
           python-version: "3.12"
       - run: pip install -r requirements.txt
       - name: Compile and import-check the examples
+        env:
+          LOAMS_ENDPOINT: http://127.0.0.1:8080
         run: |
-          python -m compileall -q quickstart sql fastapi-search
-          cd fastapi-search && python -c "import app"
+          python -m compileall -q quickstart sql fastapi-search platform
+          cd fastapi-search && python -c "import app; assert app.client.proto_rev"
